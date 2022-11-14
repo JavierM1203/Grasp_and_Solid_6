@@ -16,6 +16,21 @@ namespace Full_GRASP_And_SOLID
 
         public Product FinalProduct { get; set; }
 
+        private bool cooked = false;
+
+        public bool Cooked
+        {
+            get
+            {
+                return this.cooked;
+            }
+        }
+
+        public void SetCooked()
+        {
+            this.cooked = true;
+        }
+
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
         {
@@ -61,6 +76,27 @@ namespace Full_GRASP_And_SOLID
             }
 
             return result;
+        }
+
+        public int GetCookTime()
+        {
+            int result = 0;
+
+            foreach (var step in this.steps)
+            {
+                result += step.Time;
+            }
+
+            return result;
+        }
+
+        public void Cook()
+        {
+            CountdownTimer countdownTimer = new CountdownTimer();
+            
+            TimerClient cookedTimer = new CookedTimer(this);
+
+            countdownTimer.Register(this.GetCookTime(), cookedTimer);
         }
     }
 }
